@@ -1,0 +1,27 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+data = pd.read_csv("LUNG_CANCER.csv")
+print(data.head())
+
+X = data.drop(labels=['LUNG_CANCER'], axis=1)
+y = data['LUNG_CANCER']
+
+corrmat = data.corr(numeric_only=True)  
+plt.figure(figsize=(10, 8))
+sns.heatmap(corrmat, annot=True, fmt='.2f', cmap='RdYlGn')
+plt.title("Correlation Heatmap of Lung Cancer Dataset")
+plt.show()
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.svm import SVC
+sv = SVC()
+sv.fit(X_train, y_train)
+
+y_pred = sv.predict(X_test)
+
+from sklearn.metrics import classification_report, accuracy_score
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
