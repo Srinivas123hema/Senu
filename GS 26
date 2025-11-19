@@ -1,0 +1,312 @@
+PRG 01
+import numpy as np 
+arr = np.array( [[ 1, 2, 3], [ 4, 2, 5]] )
+print("Array is of type: ", type(arr))
+print("No. of dimensions: ", arr.ndim)
+print("Shape of array: ", arr.shape)
+print("Size of array: ", arr.size)
+print("Array stores elements of type: ", arr.dtype)
+
+
+PRG 02
+import numpy as np
+a=np.array([1,2,3,4,5])
+print("a :",a)
+sum=np.sum(a)
+print("sum :",sum)
+product=np.prod(a)
+print("product :",product)
+mean=np.mean(a)
+print("mean :",mean)
+standard_deviation=np.std(a)
+print("standard_deviation :",standard_deviation)
+variance=np.var(a)
+print("variance :",variance)
+minimum=np.min(a)
+print("minimum value :",minimum)
+maximum=np.max(a)
+print("maximum value :",maximum)
+minimum_index=np.argmin(a)
+print("minimum index :",minimum_index)
+maximum_index=np.argmax(a)
+print("maximum-index :",maximum_index)
+median=np.median(a)
+print("median :",median)
+
+
+
+PRG 03
+import numpy as np
+vector1=np.array([1,2,3,4,5])
+vector2=np.array([10,20,30,40,50])
+addition=vector1+vector2
+subtraction=vector1-vector2
+multiplication=vector1*vector2
+division=vector2/vector1
+power=vector1**2
+dot_product=np.dot (vector1,vector2)
+print("Vector1:", vector1)
+print("Vector2:", vector2)
+print("Addition:", addition)
+print("Subtraction:", subtraction)
+print("Multiplication:", multiplication)
+print("Division:", division)
+print("Power(vector1 squared):", power)
+print("Dot_product:", dot_product)
+
+
+PRG 04
+import pandas as pd
+import numpy as np
+data = pd.DataFrame([ [9, 4, 8, 9],
+[8, 10, 7, 6],
+[7, 6, 8, 5]],
+columns=['Maths', 'English','Science', 'History'])
+print(data.agg(['sum', 'min', 'max']))
+m=lambda x:x+10
+print ("The value of lambda is:", m(5))
+print ("the square of the column is:")
+print(list(map(lambda x:x*x ,data['Maths'])))
+a=list(filter(lambda x:x%2,data['Maths']))
+print ("the result of the filter function is:", a)
+from functools import reduce
+b=reduce(lambda x,y:x+y, data['Science'])
+print ("The output of the reduce is:", b)
+
+
+PRG 05
+import pandas as pd
+df = pd.DataFrame([[9, 4, 8, 9], [8, 10, 7, 6], [7, 6, 8, 5]], 
+                columns=['Maths', 'English', 'Science', 'History'])
+print(df)
+df.agg(['sum', 'min', 'max','mean','median','std','count','size',])
+
+
+PRG 06
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+df=pd.read_csv('mtcars.csv')
+print(df.head(5))
+
+print(plt.hist(x=df['mpg']))
+
+print(plt.scatter(x='wt',y='mpg',data=df))
+
+print(df['am'].value_counts().plot(kind='bar'))
+
+print(sns.boxplot(df['mpg']))
+
+print(df['mpg'].min())
+
+print(df['mpg'].max())
+
+print(df['mpg'].quantile([.1, .25, .5, .75]))
+
+
+
+PRG 07
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+data=pd.read_csv('Titanic.csv')
+data.head()
+
+sns.heatmap (data.isna())
+g=sns.histplot (x='sex', data=data)
+
+g=sns.countplot (x='embarked', hue='pclass', data=data)
+
+def add_family (data):
+    data ['family_size']=data['sibsp']+data['parch']+1
+    return data
+data=add_family (data)
+data.head(10)
+
+data.info()
+
+data.describe()
+
+
+
+PRG 08
+import pandas as pd
+import seaborn as sns
+df=pd.read_csv("Cars.csv")
+print(df.head())
+
+print(df.isna().sum())
+sns.heatmap(df.isna())
+
+df['Age']. fillna(df['Age']. mean(),inplace=True)
+df['Embarked'].fillna(df['Embarked'].mode()[0],inplace=True)
+df.drop(['Cabin'], axis=1, inplace=True)
+df.drop(df[(df['Name']=="Braund, Mr. Owen Harris")].index,inplace=True)
+df.drop(df[(df['PassengerId']==5)].index,inplace=True)
+print(df.isna().sum())
+sns.heatmap(df.isna())
+
+
+
+PRG 09
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+data=pd.read_csv("outliers.csv")
+print(data.head(5))
+
+c=data['Age'].mean()
+data=['Age'].fillna(c,inplace=True)
+print(c)
+a=data['Height'].mean()
+data['Height'].fillna(a,inplace=True)
+print(a)
+b=data['Weight'].mean()
+data['Weight'].fillna(b,inplace=True)
+print(b)
+data.info()
+data['Weight'].skew()
+sns.boxplot(data['Weight'])
+q1=data['Weight'].quantile(0.25)
+q3=data['Weight'].quantile(0.75)
+IQR=q3-q1
+lower=q1-(1.5*IQR)
+upper=q3+(1.5*IQR)
+data['Weight']=np.where(data['Weight']>upper,upper,np.where(data['Weight']<lower,lower,data['Weight']))
+sns.boxplot(data['Weight'])
+data['Weight'].skew()
+
+
+
+
+PRG 10
+import pandas as pd
+import numpy as np
+df=pd.read_csv("CIE.csv")
+print(df.info ())
+x=df['CIE'].values.reshape(-1,1)
+y=df['SEE'].values.reshape(-1,1)
+from sklearn.model_selection import train_test_split
+x_train, x_test,y_train,y_test=train_test_split(x,y,random_state=0)
+from sklearn.linear_model import LinearRegression
+lm=LinearRegression()
+lm.fit(x_train,y_train)
+y_pred=lm.predict(x_test)
+from sklearn.metrics import mean_squared_error,mean_absolute_error,r2_score
+g=y_test.reshape(21,)
+h=y_pred.reshape(21,)
+print("MAE--->",mean_absolute_error(g,h))
+print("MSE--->",mean_squared_error(g,h))
+print("score--->",r2_score(g,h))
+print (" RMSE--->",np.sqrt(mean_squared_error(g,h)))
+import matplotlib.pyplot as plt
+plt.scatter(x_train, y_train,color='g')
+plt.plot(x_test, y_pred,color='k')
+plt.show()
+
+
+
+PRG 11
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Mall_Customers_data.csv')
+X = dataset.iloc[:, [3, 4]].values
+
+
+from sklearn.cluster import KMeans
+wcss_list = []
+
+
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, init='k-means++', random_state=42)
+    kmeans.fit(X)
+    wcss_list.append(kmeans.inertia_)
+
+
+plt.plot(range(1, 11), wcss_list, marker='o')
+plt.title('The Elbow Method Graph')
+plt.xlabel('Number of clusters (k)')
+plt.ylabel('WCSS')
+plt.show()
+
+
+kmeans = KMeans(n_clusters=5, init='k-means++', random_state=42)
+y_predict = kmeans.fit_predict(X)
+
+
+plt.scatter(X[y_predict == 0, 0], X[y_predict == 0, 1], s=100, c='blue', label='Cluster 1')
+plt.scatter(X[y_predict == 1, 0], X[y_predict == 1, 1], s=100, c='green', label='Cluster 2')
+plt.scatter(X[y_predict == 2, 0], X[y_predict == 2, 1], s=100, c='red', label='Cluster 3')
+plt.scatter(X[y_predict == 3, 0], X[y_predict == 3, 1], s=100, c='cyan', label='Cluster 4')
+plt.scatter(X[y_predict == 4, 0], X[y_predict == 4, 1], s=100, c='magenta', label='Cluster 5')
+
+
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
+            s=300, c='yellow', label='Centroids')
+
+
+
+plt.title('Clusters of Customers')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1–100)')
+plt.legend()
+plt.show()
+
+
+
+
+
+PRG 12
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+data = pd.read_csv("LUNG_CANCER.csv")
+print(data.head())
+
+X = data.drop(labels=['LUNG_CANCER'], axis=1)
+y = data['LUNG_CANCER']
+
+corrmat = data.corr(numeric_only=True)  
+plt.figure(figsize=(10, 8))
+sns.heatmap(corrmat, annot=True, fmt='.2f', cmap='RdYlGn')
+plt.title("Correlation Heatmap of Lung Cancer Dataset")
+plt.show()
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.svm import SVC
+sv = SVC()
+sv.fit(X_train, y_train)
+
+y_pred = sv.predict(X_test)
+
+from sklearn.metrics import classification_report, accuracy_score
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+
+
+
+PRG 13
+from textblob import TextBlob
+from textblob.classifiers import NaiveBayesClassifier
+train = [
+ ('I love this sandwich.', 'pos'),
+ ('This is an amazing place!', 'pos'),
+ ('I feel very good about these beers.', 'pos'),
+ ('I do not like this restaurant', 'neg'),
+ ('I am tired of this stuff.', 'neg'),
+ ("I can't deal with this", 'neg'),
+ ("My boss is horrible.", "neg")
+ ]
+cl = NaiveBayesClassifier(train)
+print("The polarity of sentence I feel amazing is",cl.classify("I feel amazing!"))
+blob = TextBlob("The beer is good. But the hangover is horrible. I can't drive",
+classifier=cl)
+for s in blob.sentences:
+ print(s)
+ print(s.classify())
